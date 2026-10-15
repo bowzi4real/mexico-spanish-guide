@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>墨西哥旅遊道地西文互動指南</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="墨西哥西文指南">
+    <meta name="theme-color" content="#065f46">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,{
+        %22name%22: %22墨西哥旅遊道地西文互動指南%22,
+        %22short_name%22: %22墨西哥西文%22,
+        %22start_url%22: %22.%22,
+        %22display%22: %22standalone%22,
+        %22background_color%22: %22#fffbeb%22,
+        %22theme_color%22: %22#065f46%22,
+        %22icons%22: [
+            {
+                %22src%22: %22https://placehold.co/192x192/065f46/ffffff?text=🇲🇽%22,
+                %22sizes%22: %22192x192%22,
+                %22type%22: %22image/png%22
+            },
+            {
+                %22src%22: %22https://placehold.co/512x512/065f46/ffffff?text=🇲🇽%22,
+                %22sizes%22: %22512x512%22,
+                %22type%22: %22image/png%22
+            }
+        ]
+    }">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-50 via-orange-50 to-emerald-50 min-h-screen text-slate-800 flex flex-col m-0 p-0 w-full overflow-x-hidden">
+
+    <header class="bg-emerald-900 text-white shadow-lg sticky top-0 z-50 w-full">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <span class="text-3xl">🇲🇽</span>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">¡Ándale! 墨西哥旅遊道地西文指南</h1>
+                    <p class="text-xs text-emerald-200">背包客必備，像在地墨西哥人（Mexicano）一樣說話！</p>
+                </div>
+            </div>
+            <nav class="flex gap-2 text-sm font-medium items-center">
+                <button onclick="switchTab('guide')" id="btn-guide" class="px-4 py-2 rounded-xl bg-emerald-800 text-white transition shadow-sm hover:bg-emerald-700">情境用語</button>
+                <button onclick="switchTab('quiz')" id="btn-quiz" class="px-4 py-2 rounded-xl bg-emerald-950 text-emerald-200 transition hover:bg-emerald-800">挑戰小測驗</button>
+                <button onclick="openInstallModal()" id="btn-install" class="px-3 py-2 rounded-xl bg-orange-600 text-white transition hover:bg-orange-500 text-xs flex items-center gap-1 shadow-sm font-semibold" title="加入手機主畫面">
+                    <span>📱</span>主畫面
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8 flex-grow w-full box-border">
+        
+        <!-- Intro Banner -->
+        <div class="bg-white rounded-3xl p-6 shadow-sm border border-orange-100 mb-8 flex flex-col md:flex-row items-center gap-6">
+            <div class="w-20 h-20 bg-orange-100 rounded-2xl flex items-center justify-center text-4xl shrink-0 shadow-inner">
+                🌮
+            </div>
+            <div>
+                <h2 class="text-lg font-bold text-slate-900 mb-1">告別課本西文，解鎖在地靈魂！</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    西文課本教你的可能在墨西哥派不上用場。墨西哥人講話帶有獨特的俚語、溫暖的語調和豐富的肢體文化。學會這些道地慣用語（Mexicanismos），讓你的墨西哥之旅更加順暢、充滿人情味！
+                </p>
+            </div>
+        </div>
+
+        <!-- TAB 1: GUIDE -->
+        <div id="tab-guide" class="space-y-6">
+            <!-- Filter buttons -->
+            <div class="flex flex-wrap gap-2 pb-2" id="filter-buttons">
+                <button onclick="filterCategory('all')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white shadow-sm transition">全部顯示</button>
+                <button onclick="filterCategory('greeting')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition">打招呼</button>
+                <button onclick="filterCategory('people')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition">報人數</button>
+                <button onclick="filterCategory('food')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition">點餐</button>
+                <button onclick="filterCategory('pay')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition">付款</button>
+                <button onclick="filterCategory('toilet')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition">找廁所</button>
+                <button onclick="filterCategory('directions')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition">問路</button>
+                <button onclick="filterCategory('bargain')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition">殺價</button>
+                <button onclick="filterCategory('reject')" class="cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition">委婉拒絕</button>
+            </div>
+
+            <!-- Cards Container -->
+            <div id="cards-container" class="space-y-6">
+                <!-- Javascript will inject cards here -->
+            </div>
+        </div>
+
+        <!-- TAB 2: QUIZ -->
+        <div id="tab-quiz" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+                    <h3 class="text-xl font-bold text-slate-900">🧠 墨西哥街頭西文實戰測驗</h3>
+                    <span id="quiz-progress" class="text-xs font-semibold bg-orange-100 text-orange-700 px-3 py-1.5 rounded-xl">題目 1 / 6</span>
+                </div>
+                
+                <div id="quiz-card-container">
+                    <!-- Quiz content inserted via JS -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="install-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100 space-y-4 text-center">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-2xl mx-auto flex items-center justify-center text-3xl">
+                📱
+            </div>
+            <h3 class="text-lg font-bold text-slate-900">將網頁加入手機主畫面</h3>
+            <p class="text-xs text-slate-600 leading-relaxed text-left bg-slate-50 p-3 rounded-2xl">
+                您可以直接把這個網頁釘選在手機桌面，點開就能像 App 一樣離線或隨時隨地開啟使用，不需要經過任何對話框：
+            </p>
+            <div class="text-xs text-left space-y-2 text-slate-700 px-1">
+                <p>🍎 <b>iPhone / Safari 用戶：</b><br>點擊瀏覽器下方工具列的「分享」按鈕 (正方形帶箭頭)，然後選擇<b>「加入主畫面」</b>。</p>
+                <p>🤖 <b>Android / Chrome 用戶：</b><br>點擊右上角「選單」三點圖示，然後選擇<b>「加到主畫面」</b>或<b>「安裝應用程式」</b>。</p>
+            </div>
+            <button onclick="closeInstallModal()" class="w-full py-3 bg-emerald-700 text-white rounded-2xl text-sm font-semibold shadow-sm hover:bg-emerald-800 transition">知道了</button>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500 w-full">
+        <p>¡Buen viaje! 🇲🇽 祝你在墨西哥擁有難忘的背包客冒險之旅！</p>
+    </footer>
+
+    <script>
+        // Data structure for scenarios
+        const scenarios = [
+            {
+                id: 'greeting',
+                title: '打招呼',
+                subtitle: '進入店家與打招呼',
+                desc: '走進墨西哥的雜貨店、餐廳或市集攤位時，主動以親切且合宜的方式打招呼是非常重要的禮貌。',
+                phrases: [
+                    { es: '¡Buenas! / ¡Buenas tardes!', zh: '早安／午安！', note: '墨西哥人超常用的簡化問候語，不分店家或路邊攤，親切又自然。' },
+                    { es: '¡Hola! / ¡Buenos días!', zh: '嗨！／早安！', note: '標準且最安全的問候語，適用於任何正式或非正式店家。' },
+                    { es: '¿Qué tal?', zh: '過得如何？／你好嗎？', note: '親切且自然，常用於小型店家或民宿老闆的問候方式。' }
+                ],
+                dialogue: [
+                    { speaker: '背包客', text: '¡Buenas tardes! ¿Cómo está?' },
+                    { speaker: '店家老闆', text: '¡Buenas tardes! Muy bien, ¿en qué te puedo ayudar?' }
+                ]
+            },
+            {
+                id: 'people',
+                title: '報人數',
+                subtitle: '餐廳或咖啡廳報人數',
+                desc: '到熱鬧的餐廳（Taquería）或咖啡廳時，服務生通常會第一時間問你幾位。',
+                phrases: [
+                    { es: 'Somos dos (personas), por favor.', zh: '我們兩位（人），謝謝。', note: '標準回答方式，將數字換成 tres（三位）、cuatro（四位）等。' },
+                    { es: 'Mesa para uno, por favor.', zh: '一位的位子，謝謝。', note: '獨旅背包客非常實用的單人桌請求。' },
+                    { es: 'Aquí nomás / Para aquí', zh: '就這裡／內用', note: '在街頭 Taco 攤常被問「Para llevar或這裡」，回答 Para hier/Para aici 即可。' }
+                ],
+                dialogue: [
+                    { speaker: '服務生', text: '¿Cuántos son?' },
+                    { speaker: '背包客', text: 'Somos dos, por favor. ¿Hay mesa disponible?' }
+                ]
+            },
+            {
+                id: 'food',
+                title: '點餐',
+                subtitle: '道地街頭點餐與口味詢問',
+                desc: '墨西哥美食世界聞名，點 Taco 或飲料時，學會這些用語能讓你品嚐最道地的風味。',
+                phrases: [
+                    { es: 'Me da tres de pastor, por favor.', zh: '請給我三個牧羊人豬肉塔可。', note: '墨西哥最經典的點餐句型「Me da [數量] de [口味]」。' },
+                    { es: '¿Para llevar, por favor?', zh: '可以打包嗎？ / 幫我外帶，謝謝。', note: '除了點餐時說外帶，吃不完想打包也可以用這句。' },
+                    { es: 'Con todo, por favor.', zh: '全部配料都要（洋蔥、香菜等），謝謝。', note: '點 Taco 時店員常問「¿Con todo?」，如果你不挑食直接說這句。' },
+                    { es: 'Claro que sí, por favor.', zh: '好啊，麻煩你了 / 當然好，請。', note: '當店員詢問是否需要加辣、加起司或推薦時，用這句表示爽快同意非常道地！' },
+                    { es: '¿Pica mucho?', zh: '這個很辣嗎？', note: '墨西哥莎莎醬（Salsa）實力不容小覷，保險起見先問這句。' }
+                ],
+                dialogue: [
+                    { speaker: 'Taco店員', text: '¿Te pongo salsa verde o roja, jefe?' },
+                    { speaker: '背包客', text: 'Claro que sí, ponme salsa verde, por favor.' }
+                ]
+            },
+            {
+                id: 'pay',
+                title: '付款',
+                subtitle: '結帳與詢問金額',
+                desc: '吃飽喝足準備付錢，墨西哥常用現金（Efectivo）或部分店家收刷卡（Tarjeta）。',
+                phrases: [
+                    { es: '¿Cuánto es en total?', zh: '總共多少錢？', note: '結帳時最常用的標準問句。' },
+                    { es: '¿Aceptan tarjeta?', zh: '收信用卡嗎？', note: '小吃攤多收現金，稍具規模的餐廳通常收卡。' },
+                    { es: 'Va / Ándale, perfecto.', zh: '好喔！／行，就這樣！', note: '「Va」等同於英文 Deal 或 Sounds good；「Ándale」在同意或成交時極為常用。' },
+                    { es: 'Quédate con el cambio / Está bien así', zh: '不用找零了／這樣就好', note: '給小費（Propina）時非常道地的說法。' }
+                ],
+                dialogue: [
+                    { speaker: '背包客', text: 'La cuenta, por favor. ¿Cuánto es?' },
+                    { speaker: '店員', text: 'Son 140 pesos en total.' }
+                ]
+            },
+            {
+                id: 'toilet',
+                title: '找廁所',
+                subtitle: '詢問洗手間位置',
+                desc: '在城市觀光時，急需找廁所（Baño）的救命用語。',
+                phrases: [
+                    { es: '¿Dónde está el baño?', zh: '廁所在哪裡？', note: '標準且各地通用的詢問方式。' },
+                    { es: 'Disculpe, ¿tendrá servicio/baño?', zh: '不好意思，請問有洗手間嗎？', note: '向店家禮貌借用時的客氣說法。' }
+                ],
+                dialogue: [
+                    { speaker: '背包客', text: 'Disculpe, ¿dónde está el baño?' },
+                    { speaker: '店員', text: 'Al fondo a la derecha, junto a la barra.' }
+                ]
+            },
+            {
+                id: 'directions',
+                title: '問路',
+                subtitle: '向路人詢問方向與地點',
+                desc: '迷路或尋找地鐵站、公車站時，如何向熱情的墨西哥人開口。',
+                phrases: [
+                    { es: 'Oiga, una pregunta...', zh: '聽一下，請問個問題……', note: '向陌生人（長輩或路人）開口時極為禮貌的尊稱開頭（Oiga）。' },
+                    { es: '¿Cómo llego a...?', zh: '我要怎麼去……？', note: '後面接上你想去的地標或地鐵站名稱。' },
+                    { es: 'Está cerquita / Está derecho', zh: '就在附近／直走就到了', note: '聽當地人指路時常聽到的回覆（墨西哥人很喜歡用 cerquita 形容）。' }
+                ],
+                dialogue: [
+                    { speaker: '背包客', text: 'Disculpe, ¿cómo llego a la estación de metro más cercana?' },
+                    { speaker: '路人', text: 'Camina dos cuadras derecho y a la izquierda.' }
+                ]
+            },
+            {
+                id: 'bargain',
+                title: '殺價',
+                subtitle: '市集手作與紀念品殺價',
+                desc: '在傳統市集（Mercado）購物時，合理且友善的議價技巧。',
+                phrases: [
+                    { es: '¿Me hace una rebaja / descuento?', zh: '可以算便宜一點／打個折嗎？', note: '禮貌詢問老闆是否有折扣空間。' },
+                    { es: '¿Cuál es tu último precio?', zh: '最後算多少？／底價是多少？', note: '市集討價還價的經典好用句。' },
+                    { es: '¡Órale, está bien!', zh: '好啦，那就這樣成交！', note: '「Órale」是墨西哥萬用神詞，可用於驚嘆、答應或催促。' }
+                ],
+                dialogue: [
+                    { speaker: '背包客', text: '¿Cuánto cuesta esta artesanía? ¿Me hace un descuento?' },
+                    { speaker: '攤販老闆', text: 'Te lo dejo en 200 pesos, ya es lo menos, amigo.' }
+                ]
+            },
+            {
+                id: 'reject',
+                title: '委婉拒絕',
+                subtitle: '婉拒街頭推銷與騷擾',
+                desc: '在熱門觀光景區常遇到小販推銷或導覽兜售，如何微笑且堅定地拒絕。',
+                phrases: [
+                    { es: 'No, gracias, muchas gracias.', zh: '不用了，謝謝，非常感謝。', note: '面帶微笑且客氣地揮手拒絕，墨西哥人通常會立刻走開。' },
+                    { es: 'Ahorita no, gracias.', zh: '現在不用，謝謝。', note: '「Ahorita」是墨西哥特有的詞，字面是「等一下」，但在這裡代表委婉婉拒。' },
+                    { es: 'Estoy bien, muy amable.', zh: '我很好（不需要），謝謝您的好意。', note: '禮貌又堅定的推開兜售方式。' }
+                ],
+                dialogue: [
+                    { speaker: '小販', text: '¿Gustas comprar un recuerdito o tour?' },
+                    { speaker: '背包客', text: 'Ahorita no, gracias, muy amable.' }
+                ]
+            }
+        ];
+
+        // Quiz Data
+        const quizQuestions = [
+            {
+                question: '在墨西哥街頭或小吃攤，最道地且親切的招呼語是什麼？',
+                options: ['¡Buenos días ciudadano!', '¡Buenas!', 'Hi, my friend', 'Guten Tag'],
+                answer: 1,
+                explanation: '「¡Buenas!」是當地人打招呼極常用的精簡說法，親切又不會過於輕浮。'
+            },
+            {
+                question: '點 Taco 時，店員問你「¿Con todo?」代表什麼意思？',
+                options: ['問你要不要全部打包？', '問你全部配料（洋蔥、香菜等）都要加嗎？', '問你現金還是刷卡？', '問你要不要辣？'],
+                answer: 1,
+                explanation: '「¿Con todo?」意指「全部配料都要嗎？」，如果不挑食直接回答「Con todo, por favor」即可。'
+            },
+            {
+                question: '在點餐或店員推薦時，如果你想說「好啊，麻煩你了」，最實用的句子是：',
+                options: ['Claro que sí, por favor', 'No quiero nada', 'Vete lejos', 'Mucho ruido'],
+                answer: 0,
+                explanation: '「Claro que sí, por favor」意即「當然好，請／麻煩你了」，在答應店員的推薦或服務時非常實用。'
+            },
+            {
+                question: '在紀念品市集想請老闆算便宜一點，你可以說：',
+                options: ['¿Cuánto es la multa?', '¿Me hace un descuento?', '¿Dónde está el baño?', 'No entiendo'],
+                answer: 1,
+                explanation: '「¿Me hace un descuento?」或「¿Me hace una rebaja?」是禮貌詢問折扣的標準句型。'
+            },
+            {
+                question: '小販向你兜售紀念品，你想用墨西哥特有的詞彙「委婉拒絕」，要說：',
+                options: ['Ahorita no, gracias.', 'Cierra la boca', 'Vete ya', 'No hablo español'],
+                answer: 0,
+                explanation: '「Ahorita」字面是等一下，但在拒絕時代表「現在不用，謝謝」，是墨西哥人非常道地的拒絕藝術。'
+            },
+            {
+                question: '結帳時，如果想瀟灑地告訴店員「不用找零了」，道地的說法是：',
+                options: ['Dame todo', 'Quédate con el cambio', 'Muy caro', 'Sin dinero'],
+                answer: 1,
+                explanation: '「Quédate con el cambio」直譯為「留著零錢吧」，也就是不用找零的意思。'
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let score = 0;
+        let selectedOption = null;
+
+        // Render cards
+        function renderCards(filter = 'all') {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+
+            const filtered = filter === 'all' ? scenarios : scenarios.filter(s => s.id === filter);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition space-y-4';
+                
+                let phrasesHtml = item.phrases.map(p => `
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-1">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                            <span class="font-bold text-emerald-700 text-base">« ${p.es} »</span>
+                            <span class="text-sm font-medium text-slate-700">${p.zh}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 pt-1 border-t border-slate-200/60 mt-2">💡 ${p.note}</p>
+                    </div>
+                `).join('');
+
+                let dialogueHtml = item.dialogue.map(d => `
+                    <div class="flex items-start gap-2.5 text-xs">
+                        <span class="font-bold px-2 py-0.5 rounded-lg ${d.speaker === '背包客' ? 'bg-orange-100 text-orange-800' : 'bg-emerald-100 text-emerald-800'}">${d.speaker}</span>
+                        <span class="text-slate-600 bg-slate-100/70 px-3 py-1.5 rounded-xl flex-grow">${d.text}</span>
+                    </div>
+                `).join('');
+
+                card.innerHTML = `
+                    <div class="border-b border-slate-100 pb-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-slate-900">${item.title}</h3>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-orange-50 text-orange-700 rounded-xl">${item.subtitle}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1">${item.desc}</p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">道地實用句：</h4>
+                        <div class="grid grid-cols-1 gap-3">
+                            ${phrasesHtml}
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50/50 rounded-2xl p-4 border border-amber-100/60 space-y-3 mt-4">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-amber-800">情境對話示範：</h4>
+                        <div class="space-y-2">
+                            ${dialogueHtml}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Filter category switch
+        function filterCategory(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = 'cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition';
+            });
+            event.target.className = 'cat-btn px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white shadow-sm transition';
+            renderCards(cat);
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            const guideTab = document.getElementById('tab-guide');
+            const quizTab = document.getElementById('tab-quiz');
+            const btnGuide = document.getElementById('btn-guide');
+            const btnQuiz = document.getElementById('btn-quiz');
+
+            if (tab === 'guide') {
+                guideTab.classList.remove('hidden');
+                quizTab.classList.add('hidden');
+                btnGuide.className = 'px-4 py-2 rounded-xl bg-emerald-800 text-white transition shadow-sm hover:bg-emerald-700';
+                btnQuiz.className = 'px-4 py-2 rounded-xl bg-emerald-950 text-emerald-200 transition hover:bg-emerald-800';
+            } else {
+                guideTab.classList.add('hidden');
+                quizTab.classList.remove('hidden');
+                btnQuiz.className = 'px-4 py-2 rounded-xl bg-emerald-800 text-white transition shadow-sm hover:bg-emerald-700';
+                btnGuide.className = 'px-4 py-2 rounded-xl bg-emerald-950 text-emerald-200 transition hover:bg-emerald-800';
+                renderQuiz();
+            }
+        }
+
+        // Quiz rendering
+        function renderQuiz() {
+            const container = document.getElementById('quiz-card-container');
+            const progress = document.getElementById('quiz-progress');
+
+            if (currentQuizIndex >= quizQuestions.length) {
+                container.innerHTML = `
+                    <div class="text-center py-10 space-y-4">
+                        <div class="text-6xl">🎉</div>
+                        <h4 class="text-2xl font-bold text-slate-900">恭喜完成挑戰！</h4>
+                        <p class="text-sm text-slate-600">你的得分是 <span class="text-emerald-700 font-bold text-lg">${score}</span> / ${quizQuestions.length}</p>
+                        <button onclick="resetQuiz()" class="px-6 py-3 bg-emerald-700 text-white text-sm font-semibold rounded-2xl shadow-sm hover:bg-emerald-800 transition">重新測驗</button>
+                    </div>
+                `;
+                progress.textContent = `測驗完成`;
+                return;
+            }
+
+            progress.textContent = `題目 ${currentQuizIndex + 1} / ${quizQuestions.length}`;
+            const q = quizQuestions[currentQuizIndex];
+
+            let optionsHtml = q.options.map((opt, idx) => `
+                <button onclick="selectOption(${idx})" id="opt-${idx}" class="w-full text-left p-4 rounded-2xl border border-slate-200 text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 transition flex items-center justify-between">
+                    <span>${opt}</span>
+                    <span class="w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs"></span>
+                </button>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <h4 class="text-lg font-bold text-slate-900 leading-snug">${q.question}</h4>
+                    <div class="space-y-3" id="options-group">
+                        ${optionsHtml}
+                    </div>
+                    <div id="quiz-feedback" class="hidden rounded-2xl p-4 text-xs space-y-2"></div>
+                    <div class="flex justify-end pt-4">
+                        <button id="next-btn" onclick="nextQuestion()" disabled class="px-6 py-3 bg-slate-200 text-slate-400 text-sm font-semibold rounded-2xl cursor-not-allowed transition">下一題</button>
+                    </div>
+                </div>
+            `;
+            selectedOption = null;
+        }
+
+        function selectOption(idx) {
+            if (selectedOption !== null) return;
+            selectedOption = idx;
+            const q = quizQuestions[currentQuizIndex];
+            const isCorrect = idx === q.answer;
+
+            if (isCorrect) score++;
+
+            q.options.forEach((_, i) => {
+                const btn = document.getElementById(`opt-${i}`);
+                btn.disabled = true;
+                if (i === q.answer) {
+                    btn.className = 'w-full text-left p-4 rounded-2xl border border-emerald-500 bg-emerald-50 text-sm font-bold text-emerald-900 flex items-center justify-between';
+                    btn.querySelector('span:last-child').innerHTML = '✓';
+                    btn.querySelector('span:last-child').className = 'w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs';
+                } else if (i === idx && !isCorrect) {
+                    btn.className = 'w-full text-left p-4 rounded-2xl border border-rose-300 bg-rose-50 text-sm font-bold text-rose-900 flex items-center justify-between';
+                    btn.querySelector('span:last-child').innerHTML = '✕';
+                    btn.querySelector('span:last-child').className = 'w-5 h-5 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs';
+                } else {
+                    btn.className = 'w-full text-left p-4 rounded-2xl border border-slate-100 bg-slate-50/50 text-sm text-slate-400 flex items-center justify-between';
+                }
+            });
+
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.className = isCorrect ? 'rounded-2xl p-4 text-xs space-y-1 bg-emerald-50 text-emerald-800 border border-emerald-200' : 'rounded-2xl p-4 text-xs space-y-1 bg-orange-50 text-orange-800 border border-orange-200';
+            feedback.innerHTML = `
+                <p class="font-bold">${isCorrect ? '✨ 答對了！' : '💡 答錯囉！'}</p>
+                <p>${q.explanation}</p>
+            `;
+            feedback.classList.remove('hidden');
+
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.disabled = false;
+            nextBtn.className = 'px-6 py-3 bg-emerald-700 text-white text-sm font-semibold rounded-2xl shadow-sm hover:bg-emerald-800 transition cursor-pointer';
+        }
+
+        function nextQuestion() {
+            currentQuizIndex++;
+            renderQuiz();
+        }
+
+        function resetQuiz() {
+            currentQuizIndex = 0;
+            score = 0;
+            renderQuiz();
+        }
+
+        function openInstallModal() {
+            document.getElementById('install-modal').classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('install-modal').classList.add('hidden');
+        }
+
+        // Initial render on load
+        window.onload = function() {
+            renderCards('all');
+        };
+    </script>
+
+</body>
+</html>
