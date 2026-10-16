@@ -65,7 +65,7 @@
             <div>
                 <h2 class="text-lg font-bold text-slate-900 mb-1">告別課本西文，解鎖在地靈魂！</h2>
                 <p class="text-sm text-slate-600 leading-relaxed">
-                    西文課本教你的可能在墨西哥派不上用場。墨西哥人講話帶有獨特的俚語、溫暖的語調和豐富的肢體文化。學會這些道地慣用語（Mexicanismos），讓你的墨西哥之旅更加順暢、充滿人情味！
+                    西文課本教你的可能在墨西哥派不上用場。墨西哥人講話帶有獨特的俚語、溫暖的語調和豐富的肢體文化。學會這些道地慣用語（Mexicanismos），點擊句子的 🔊 按鈕還能聆聽真人語音跟讀練習，讓你的墨西哥之旅更加順暢！
                 </p>
             </div>
         </div>
@@ -129,6 +129,19 @@
     </footer>
 
     <script>
+        // Speech Synthesis Helper
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) {
+                alert('您的瀏覽器不支援語音朗讀功能');
+                return;
+            }
+            window.speechSynthesis.cancel(); // Stop any ongoing speech
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'es-MX'; // Mexican Spanish voice accent if available
+            utterance.rate = 0.9; // Slightly slower for language learners
+            window.speechSynthesis.speak(utterance);
+        }
+
         // Data structure for scenarios
         const scenarios = [
             {
@@ -153,8 +166,7 @@
                 desc: '到熱鬧的餐廳（Taquería）或咖啡廳時，服務生通常會第一時間問你幾位。',
                 phrases: [
                     { es: 'Somos dos (personas), por favor.', zh: '我們兩位（人），謝謝。', note: '標準回答方式，將數字換成 tres（三位）、cuatro（四位）等。' },
-                    { es: 'Mesa para uno, por favor.', zh: '一位的位子，謝謝。', note: '獨旅背包客非常實用的單人桌請求。' },
-                    { es: 'Aquí nomás / Para aquí', zh: '就這裡／內用', note: '在街頭 Taco 攤常被問「Para llevar或這裡」，回答 Para hier/Para aici 即可。' }
+                    { es: 'Mesa para uno, por favor.', zh: '一位的位子，謝謝。', note: '獨旅背包客非常實用的單人桌請求。' }
                 ],
                 dialogue: [
                     { speaker: '服務生', text: '¿Cuántos son?' },
@@ -299,7 +311,7 @@
         let score = 0;
         let selectedOption = null;
 
-        // Render cards
+        // Render cards with audio button
         function renderCards(filter = 'all') {
             const container = document.getElementById('cards-container');
             container.innerHTML = '';
@@ -312,18 +324,26 @@
                 
                 let phrasesHtml = item.phrases.map(p => `
                     <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-1">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <span class="font-bold text-emerald-700 text-base">« ${p.es} »</span>
-                            <span class="text-sm font-medium text-slate-700">${p.zh}</span>
+                            <button onclick="speakText('${p.es.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-emerald-100 text-emerald-800 rounded-xl text-xs font-semibold hover:bg-emerald-200 transition flex items-center gap-1 shrink-0">
+                                🔊 聆聽發音
+                            </button>
                         </div>
+                        <div class="text-sm font-medium text-slate-700 pt-1">${p.zh}</div>
                         <p class="text-xs text-slate-500 pt-1 border-t border-slate-200/60 mt-2">💡 ${p.note}</p>
                     </div>
                 `).join('');
 
                 let dialogueHtml = item.dialogue.map(d => `
-                    <div class="flex items-start gap-2.5 text-xs">
-                        <span class="font-bold px-2 py-0.5 rounded-lg ${d.speaker === '背包客' ? 'bg-orange-100 text-orange-800' : 'bg-emerald-100 text-emerald-800'}">${d.speaker}</span>
-                        <span class="text-slate-600 bg-slate-100/70 px-3 py-1.5 rounded-xl flex-grow">${d.text}</span>
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs bg-slate-100/70 p-3 rounded-2xl">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold px-2.5 py-1 rounded-lg ${d.speaker === '背包客' ? 'bg-orange-100 text-orange-800' : 'bg-emerald-100 text-emerald-800'}">${d.speaker}</span>
+                            <span class="text-slate-700 font-medium">${d.text}</span>
+                        </div>
+                        <button onclick="speakText('${d.text.replace(/'/g, "\\'")}')" class="px-2.5 py-1 bg-white text-emerald-800 rounded-lg text-xs font-semibold hover:bg-emerald-50 transition border border-emerald-200 self-start sm:self-auto">
+                            🔊 聽發音
+                        </button>
                     </div>
                 `).join('');
 
